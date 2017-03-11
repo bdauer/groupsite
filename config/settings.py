@@ -31,7 +31,7 @@ PRODUCTION = SECURE_SETTINGS.get("PRODUCTION", True)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'group-site-staging.pin92cyv3d.us-east-1.elasticbeanstalk.com']
 
 
 # Application definition
