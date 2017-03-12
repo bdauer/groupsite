@@ -1,10 +1,11 @@
 from __future__ import unicode_literals
+from django.contrib.auth.models import User
 
 from django.db import models
 
 # Create your models here.
 
-class GroupManager(models.Manager):
+class UserGroupManager(models.Manager):
 
     def get_user_groups(self, user):
         """
@@ -12,16 +13,34 @@ class GroupManager(models.Manager):
         """
         pass
 
-class Group(models.Model):
-    name = models.CharField(max_length=20)
-    description = models.TextField()
-    creator = models.OneToOneField(User)
-    users = models.ManyToManyField(User)
+class UserGroup(models.Model):
+    """
+    Group for users. Not to be confused with the auth groups.
+
+    name: the name of the group.
+    description: a brief description of the group.
+    creator: the creator of the group, endowed with administrative capabilities.
+    members: members of the group.
+    """
+    name = models.CharField(max_length=20, unique=True)
+    description = models.TextField(default=None)
+    creator = models.ForeignKey(User, related_name='usergroup_creator')
+    members = models.ManyToManyField(User, related_name='usergroup_members')
 
 
-class User_Profile(models.Model):
+class UserProfile(models.Model):
+    """
+    Extension of the base User class for storing profile info.
+
+    user: the associated user.
+    avatar: the visual representation of the user.
+    bio: a little bit about the user.
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField()
+    avatar = models.ImageField(default=None)
+    bio = models.TextField(default=None)
+
+
 
 class InvitationManager(models.Manager):
 
@@ -39,9 +58,12 @@ class InvitationManager(models.Manager):
 
 
 class Invitation(models.Model):
-    group = models.OneToOneField(Group)
-    invitor = models.OneToOneField(User)
-    invitee = models.OneToOneField(User)
+    """
+    Invitations are extended by a group creator to allow membership in their group.
+    """
+    user_group = models.OneToOneField(UserGroup)
+    invitor = models.ForeignKey(User, related_name='invitor')
+    invitee = models.ForeignKey(User, related_name='invitee')
 
     STATUSES = ( ('A', 'accepted'),
                  ('D', 'declined'),
