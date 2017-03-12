@@ -11,7 +11,7 @@ class UserGroupManager(models.Manager):
         """
         Return all groups that have the user as a member.
         """
-        pass
+        return self.filter(members=user)
 
 class UserGroup(models.Model):
     """
@@ -22,10 +22,14 @@ class UserGroup(models.Model):
     creator: the creator of the group, endowed with administrative capabilities.
     members: members of the group.
     """
+    objects = UserGroupManager()
     name = models.CharField(max_length=20, unique=True)
     description = models.TextField(default=None, null=True)
     creator = models.ForeignKey(User, related_name='usergroup_creator')
     members = models.ManyToManyField(User, related_name='usergroup_members')
+
+    def __str__(self):
+        return self.name
 
 
 class UserProfile(models.Model):
@@ -48,19 +52,22 @@ class InvitationManager(models.Manager):
         """
         Return all pending sent invites.
         """
-        pass
+        return self.filter(invitor=user,
+                           status='pending')
 
     def get_pending_received_invites(self, user):
         """
         Return all pending received invites.
         """
-        pass
+        return self.filter(invitee=user,
+                           status='pending')
 
 
 class Invitation(models.Model):
     """
     Invitations are extended by a group creator to allow membership in their group.
     """
+    objects = InvitationManager()
     user_group = models.OneToOneField(UserGroup)
     invitor = models.ForeignKey(User, related_name='invitor')
     invitee = models.ForeignKey(User, related_name='invitee')
