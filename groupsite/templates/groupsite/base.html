@@ -16,15 +16,19 @@
         <nav class="navbar navbar-inverse">
 
          <!-- {% url 'tracktasks:index' as index %} use this as basis-->
-         <a href="/" type="button" class="btn btn-default">Groups</a>
-         <a href="/" type="button" class="btn btn-default">Profile</a>
+
+
+         {% if request.get_full_path != '/' %}
+             <a href="{% url 'groupsite:index' %}" type="button" class="btn btn-default">Home</a>
+          {% endif %}
+          {% if request.get_full_path != 'groups' %}
+          <a href="{% url 'groupsite:groups' %}" type="button" class="btn btn-default">Groups</a>
+          {% endif %}
+          {% if request.get_full_path != 'profile' %}
+          <a href="/" type="button" class="btn btn-default">Profile</a>
+          {% endif %}
          {% if user.is_authenticated %}
-            {% if request.get_full_path != login %}
                 <a href="{% url 'logout' %}" type="button" class="btn btn-default">Sign out</a>
-            {% endif %}
-             {% if request.get_full_path != index %}
-                 <a href="{% url 'groupsite:index' %}" type="button" class="btn btn-default">Home</a>
-              {% endif %}
         {% else %}
              <a href="{% url 'groupsite:login' %}" type="button" class="btn btn-default">Sign in</a>
         {% endif %}
