@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'groupsite',
-    # 'social.apps.django_app.default'
     'social_django',
 ]
 
@@ -80,6 +79,7 @@ SOCIAL_AUTH_PIPELINE = ('social_core.pipeline.social_auth.social_details',
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = SECURE_SETTINGS["GOOGLE_OAUTH2_KEY"]
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = SECURE_SETTINGS["GOOGLE_OAUTH2_SECRET"]
 
+LOGIN_REDIRECT_URL = "groupsite:index"
 
 ROOT_URLCONF = 'config.urls'
 
