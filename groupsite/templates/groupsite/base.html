@@ -15,9 +15,6 @@
     <div class="container">
         <nav class="navbar navbar-inverse">
 
-         <!-- {% url 'tracktasks:index' as index %} use this as basis-->
-
-
          {% if request.get_full_path != '/' %}
              <a href="{% url 'groupsite:index' %}" type="button" class="btn btn-default">Home</a>
           {% endif %}
@@ -28,6 +25,9 @@
           <a href="/" type="button" class="btn btn-default">Profile</a>
           {% endif %}
          {% if user.is_authenticated %}
+            {% if request.get_full_path == '/groups' %}
+                 <a href="{% url 'groupsite:create group' %}" type="button" class="btn btn-default">Create Group</a>
+            {% endif %}
                 <a href="{% url 'logout' %}" type="button" class="btn btn-default">Sign out</a>
         {% else %}
              <a href="{% url 'groupsite:login' %}" type="button" class="btn btn-default">Sign in</a>
