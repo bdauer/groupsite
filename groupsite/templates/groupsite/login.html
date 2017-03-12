@@ -1,0 +1,9 @@
+{% extends "groupsite/base.html" %}
+
+
+{% block content %}
+<p>Log in or sign up with your social account:</p>
+<div class="btn-group">
+    <a href="{% url "social:begin" "google-oauth2" %}" class="btn btn-default">Google</a>
+</div>
+{% endblock %}

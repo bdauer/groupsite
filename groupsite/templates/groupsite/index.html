@@ -1,0 +1,13 @@
+{% extends "groupsite/base.html" %}
+
+
+{% block content %}
+
+{% if user.is_authenticated %}
+Welcome back, {{ user.first_name }}! Let's create some groups.
+{% else %}
+<h3>Welcome to the groupiest site on the planet!</h3>
+
+<p>Groupsite if the groupiest site you've ever seen. Create groups. Invite your friends. Establish the coolest cliques in town.</p>
+{% endif %}
+{% endblock %}
