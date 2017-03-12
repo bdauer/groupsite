@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import generic
 from django.http import (HttpResponse, HttpRequest, HttpResponseRedirect)
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -29,6 +30,23 @@ class GroupsView(LoginRequiredMixin, generic.ListView):
         data['received_invites'] = Invitation.objects.get_pending_received_invites(
                                                                         request.user)
         return data
+
+class CreateGroupView(LoginRequiredMixin, generic.CreateView):
+    """
+    Create a new group
+    """
+    template_name = "groupsite/creategroup.html"
+    model = UserGroup
+    fields = ['name', 'description']
+
+    def get_success_url(self):
+        return reverse_lazy('groupsite:groups')
+
+    def form_valid(self, form):
+        form.instance.creator = self.request.user
+        form.save()
+        form.instance.members.add(self.request.user)
+        return super(CreateGroupView, self).form_valid(form)
 
 # Profile
 #   name, avatar, bio.
