@@ -23,7 +23,7 @@ class UserGroup(models.Model):
     members: members of the group.
     """
     name = models.CharField(max_length=20, unique=True)
-    description = models.TextField(default=None)
+    description = models.TextField(default=None, null=True)
     creator = models.ForeignKey(User, related_name='usergroup_creator')
     members = models.ManyToManyField(User, related_name='usergroup_members')
 
@@ -37,8 +37,8 @@ class UserProfile(models.Model):
     bio: a little bit about the user.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(default=None)
-    bio = models.TextField(default=None)
+    avatar = models.ImageField(default=None, null=True)
+    bio = models.TextField(default=None, null=True)
 
 
 
