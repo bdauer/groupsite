@@ -14,17 +14,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
+from django.contrib.auth import views as auth_views
 from django.contrib import admin
 from django.conf import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('groupsite.urls', namespace="groupsite")),
+    url('^logout/$', auth_views.logout, {"next_page": "groupsite:index"}, name="logout"),
+    url("^oauth/", include("social_django.urls", namespace="social")),
 ]
 
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns += [
         url(r'^__debug__/', include(debug_toolbar.urls)),
-        url("^oauth/", include("social_django.urls", namespace="social")),
+
 ]
