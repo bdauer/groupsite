@@ -77,7 +77,7 @@ db*
 
 .DS_STORE
 
-*.html
+
 .aws
 
 # Elastic Beanstalk Files
