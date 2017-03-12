@@ -1,8 +1,14 @@
 from django.shortcuts import render
-from django.http import (HttpResponse, HttpRequest)
+from django.http import (HttpResponse, HttpRequest, HttpResponseRedirect)
+from django.core.urlresolvers import reverse_lazy
 # Create your views here.
 def index(request):
-    return HttpResponse("Hello World")
+    return render(request, 'groupsite/index.html')
+
+
+def login(request):
+    return render(request, 'groupsite/login.html')
+
 
 # Profile
 #   name, avatar, bio.
