@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'groupsite',
+    # 'social.apps.django_app.default'
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -55,6 +57,29 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+     'django.contrib.auth.backends.ModelBackend'
+)
+
+# http://python-social-auth.readthedocs.io/en/latest/pipeline.html#authentication-pipeline
+SOCIAL_AUTH_PIPELINE = ('social_core.pipeline.social_auth.social_details',
+                        'social_core.pipeline.social_auth.social_uid',
+                        'social_core.pipeline.social_auth.auth_allowed',
+                        'social_core.pipeline.social_auth.social_user',
+                        'social_core.pipeline.user.get_username',
+                        'social_core.pipeline.mail.mail_validation',
+                        'social_core.pipeline.social_auth.associate_by_email',
+                        'social_core.pipeline.user.create_user',
+                        'groupsite.pipeline.save_user',
+                        'social_core.pipeline.social_auth.associate_user',
+                         'social_core.pipeline.social_auth.load_extra_data',
+                         'social_core.pipeline.user.user_details')
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = SECURE_SETTINGS["GOOGLE_OAUTH2_KEY"]
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = SECURE_SETTINGS["GOOGLE_OAUTH2_SECRET"]
+
 
 ROOT_URLCONF = 'config.urls'
 
@@ -69,6 +94,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -145,7 +172,7 @@ if DEBUG:
     INSTALLED_APPS += (
         'debug_toolbar',
     )
-    INTERNAL_IPS = ('127.0.0.1', )
+    INTERNAL_IPS = ('127.0.0.1', 'localhost')
     DEBUG_TOOLBAR_CONFIG = {
         'INTERCEPT_REDIRECTS': False,
     }
