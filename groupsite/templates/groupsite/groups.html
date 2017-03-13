@@ -1,0 +1,46 @@
+{% extends "groupsite/base.html" %}
+
+{% block content %}
+    <div class="list-group text-center">
+    <h2>Groups</h2>
+
+    {% for group in groups %}
+        <form method="GET"
+        {% if request.user == group.creator %}
+            action="{% url 'groupsite:update group' pk=group.id %}" >
+        {% else %}
+            action="{% url 'groupsite:group detail' pk=group.id %}" >
+        {% endif %}
+        {% csrf_token %}
+        <button type="button submit" class="list-group-item" name="detail_{{group.id}}">
+            <br>{{ group.name }}
+        {% if request.user == group.creator %}
+            <strong>(creator)</strong>
+        {% endif %}
+        </button>
+    </div>
+
+    {% endfor %}
+
+    <div class="list-group text-center">
+    <h2>Received Invites</h2>
+    {% for invite in received_invites %}
+    <form method="POST" action="{% url 'groupsite:update invite' pk=group.id %}" >
+        <p>Group: {{ invite.user_group.name }}.</p><
+        <p>Description: {{ invite.user_group.description }}</p>
+        <p>Invited by: {{ invite.invitor.username }}. </p>
+        <button type="button" class="list-group-item" name="accepted_{{invite.id}}">Accept</button>
+        <button type="button" class="list-group-item" name="declined_{{invite.id}}">Decline</button>
+    {% endfor %}
+    </div>
+
+    <div class="list-group text-center">
+    <h2>Sent invites</h2>
+    {% for invite in sent_invites %}
+        <p>Group: {{ invite.user_group.name }}</p>
+        <p>Invited: {{ invite.invitee.username }}</p>
+        <br>
+    {% endfor %}
+    </div>
+
+{% endblock %}
