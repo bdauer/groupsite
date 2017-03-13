@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.http import (HttpResponse, HttpRequest, HttpResponseRedirect)
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django import forms
 from .models import UserGroup, Invitation
 
 # Create your views here.
@@ -33,11 +34,14 @@ class GroupsView(LoginRequiredMixin, generic.ListView):
 
 class CreateGroupView(LoginRequiredMixin, generic.CreateView):
     """
-    Create a new group
+    Create a new group.
     """
     template_name = "groupsite/creategroup.html"
     model = UserGroup
-    fields = ['name', 'description']
+    fields = ['name', 'description', 'members']
+
+    # def get_absolute_url(self):
+    #     return reverse("update group", kwargs={'pk': self.pk})
 
     def get_success_url(self):
         return reverse_lazy('groupsite:groups')
@@ -46,7 +50,30 @@ class CreateGroupView(LoginRequiredMixin, generic.CreateView):
         form.instance.creator = self.request.user
         form.save()
         form.instance.members.add(self.request.user)
+        form.save()
         return super(CreateGroupView, self).form_valid(form)
+
+class ManageGroupView(LoginRequiredMixin, generic.UpdateView):
+    """
+    Update a group.
+    """
+    # def get_object(self):
+    #     object = UserGroup.objects.get(pk=self.kwargs['id'])
+    template_name = "groupsite/creategroup.html"
+    model = UserGroup
+    fields = ['description', 'members']
+
+    def get_success_url(self):
+        return reverse_lazy('groupsite:groups')
+
+class GroupDetailView(LoginRequiredMixin, generic.DetailView):
+    """
+    View detailed information about a group.
+    """
+    template_name = "groupsite/groupdetail.html"
+    model = UserGroup
+
+
 
 # Profile
 #   name, avatar, bio.
@@ -60,9 +87,6 @@ class CreateGroupView(LoginRequiredMixin, generic.CreateView):
 # Pending invites
 # name, description, inviter, accept, decline.
 
-# Create Group
-#   name
-#   description
 
 # Manage Group (only my groups)
 #   name, dscription, invite, current users
