@@ -15,23 +15,30 @@
     <div class="container">
         <nav class="navbar navbar-inverse">
 
-         {% if request.get_full_path != '/' %}
-             <a href="{% url 'groupsite:index' %}" type="button" class="btn btn-default">Home</a>
-          {% endif %}
-          {% if request.get_full_path != 'groups' %}
-          <a href="{% url 'groupsite:groups' %}" type="button" class="btn btn-default">Groups</a>
-          {% endif %}
-          {% if request.get_full_path != 'profile' %}
-          <a href="/" type="button" class="btn btn-default">Profile</a>
-          {% endif %}
-         {% if user.is_authenticated %}
-            {% if request.get_full_path == '/groups' %}
-                 <a href="{% url 'groupsite:create group' %}" type="button" class="btn btn-default">Create Group</a>
-            {% endif %}
-                <a href="{% url 'logout' %}" type="button" class="btn btn-default">Sign out</a>
-        {% else %}
-             <a href="{% url 'groupsite:login' %}" type="button" class="btn btn-default">Sign in</a>
+        {% if request.get_full_path != '/' %}
+            <a href="{% url 'groupsite:index' %}" type="button" class="btn btn-default">Home</a>
         {% endif %}
+
+        {% if user.is_authenticated %}
+
+            {% if request.get_full_path == '/groups' %}
+                <a href="{% url 'groupsite:create group' %}" type="button" class="btn btn-default">Create Group</a>
+            {% else %}
+                <a href="{% url 'groupsite:groups' %}" type="button" class="btn btn-default">Groups</a>
+            {% endif %}
+
+            {% if '/profiledetails' in request.get_full_path %}
+                <a href="{% url 'groupsite:update profile' pk=user.pk %}" type="button" class="btn btn-default">Edit Profile</a>
+            {% else %}
+                <a href="{% url 'groupsite:profile details' pk=user.pk %}" type="button" class="btn btn-default">Profile</a>
+            {% endif %}
+
+            <a href="{% url 'logout' %}" type="button" class="btn btn-default">Sign out</a>
+
+        {% else %}
+            <a href="{% url 'groupsite:login' %}" type="button" class="btn btn-default">Sign in</a>
+        {% endif %}
+
         </nav>
         <div id="content">
             {% block content %}
