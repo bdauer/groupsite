@@ -41,7 +41,7 @@ class UserProfile(models.Model):
     bio: a little bit about the user.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(default=None, null=True)
+    avatar = models.ImageField(default=None, null=True, upload_to='photos/')
     bio = models.TextField(default=None, null=True)
 
 
