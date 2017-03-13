@@ -16,14 +16,16 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib.auth import views as auth_views
 from django.contrib import admin
+from django.contrib.staticfiles.urls import static
 from django.conf import settings
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('groupsite.urls', namespace="groupsite")),
     url('^logout/$', auth_views.logout, {"next_page": "groupsite:index"}, name="logout"),
     url("^oauth/", include("social_django.urls", namespace="social")),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar
