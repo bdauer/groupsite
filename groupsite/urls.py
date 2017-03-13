@@ -11,5 +11,7 @@ urlpatterns = [
     url(r'^updateinvite/$', views.update_invite, name='update invite'),
     url(r'^createinvite/$', views.CreateInviteView.as_view(), name='create invite'),
     url(r'^updateprofile/(?P<pk>[0-9]+)/$', views.ManageProfile.as_view(), name='update profile'),
-    url(r'^profiledetails/(?P<pk>[0-9]+)/$'. views.ProfileDetailView.as_view(), name='profile details')
+    url(r'^profiledetails/(?P<pk>[0-9]+)/$', views.ProfileDetailView.as_view(), name='profile details')
     ]
+
+# update profile, create invite, update invite

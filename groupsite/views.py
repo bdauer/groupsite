@@ -5,7 +5,7 @@ from django.http import (HttpResponse, HttpRequest, HttpResponseRedirect,
                          JsonResponse)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django import forms
-from .models import UserGroup, Invitation
+from .models import UserGroup, Invitation, UserProfile
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -100,7 +100,11 @@ class ManageProfile(LoginRequiredMixin, generic.UpdateView):
     """
     template_name = "groupsite/manageprofile.html"
     model = UserProfile
-    fields = ['avatar', 'bio']
+    fields = ['avatar','bio']
+
+    def get_success_url(self):
+        print(self.request.user)
+        return reverse_lazy('groupsite:profile details', kwargs={"pk":self.request.user.pk})
 
 class ProfileDetailView(LoginRequiredMixin, generic.DetailView):
     """
