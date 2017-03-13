@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
-from django.http import (HttpResponse, HttpRequest, HttpResponseRedirect)
+from django.http import (HttpResponse, HttpRequest, HttpResponseRedirect,
+                         JsonResponse)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django import forms
 from .models import UserGroup, Invitation
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
@@ -14,6 +16,20 @@ def index(request):
 def login(request):
     return render(request, 'groupsite/login.html')
 
+@login_required
+def update_invite(request):
+    """
+    Accept or decline an invite.
+    """
+    if request.is_ajax():
+        values = Request.POST['name'].split('_')
+        status = values[0]
+        pk = values[1]
+        invite = Invitation.objects.get(pk=pk)
+        invite.status = status
+        invite.save()
+        content = {"status": status}
+        return JsonResponse(content)
 
 class GroupsView(LoginRequiredMixin, generic.ListView):
     """
@@ -32,6 +48,14 @@ class GroupsView(LoginRequiredMixin, generic.ListView):
                                                                         request.user)
         return data
 
+class CreateInviteView(LoginRequiredMixin, generic.CreateView):
+    """
+    Create a new invite.
+    """
+    template_name = "groupsite/createinvite.html"
+    model = Invitation
+    fields = ['user_group', 'invitee']
+
 class CreateGroupView(LoginRequiredMixin, generic.CreateView):
     """
     Create a new group.
@@ -39,9 +63,6 @@ class CreateGroupView(LoginRequiredMixin, generic.CreateView):
     template_name = "groupsite/creategroup.html"
     model = UserGroup
     fields = ['name', 'description', 'members']
-
-    # def get_absolute_url(self):
-    #     return reverse("update group", kwargs={'pk': self.pk})
 
     def get_success_url(self):
         return reverse_lazy('groupsite:groups')
@@ -73,6 +94,20 @@ class GroupDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = "groupsite/groupdetail.html"
     model = UserGroup
 
+class ManageProfile(LoginRequiredMixin, generic.UpdateView):
+    """
+    Edit your profile
+    """
+    template_name = "groupsite/manageprofile.html"
+    model = UserProfile
+    fields = ['avatar', 'bio']
+
+class ProfileDetailView(LoginRequiredMixin, generic.DetailView):
+    """
+    View your profile.
+    """
+    template_name = "groupsite/profiledetail.html"
+    model = UserProfile
 
 
 # Profile
@@ -80,13 +115,3 @@ class GroupDetailView(LoginRequiredMixin, generic.DetailView):
 #
 # Edit Profile
 #   name, avatar, bio.
-
-# Groups
-# My groups
-#   name, description. Click to edit.
-# Pending invites
-# name, description, inviter, accept, decline.
-
-
-# Manage Group (only my groups)
-#   name, dscription, invite, current users
