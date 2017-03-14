@@ -18,7 +18,7 @@ def login(request):
     return render(request, 'groupsite/login.html')
 
 @login_required
-def update_invite(request):
+def update_invite(request, group_id):
     """
     Accept or decline an invite.
     """
