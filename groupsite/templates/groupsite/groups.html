@@ -13,14 +13,14 @@
         {% endif %}
         {% csrf_token %}
         <button type="button submit" class="list-group-item" name="detail_{{group.id}}">
-            <br>{{ group.name }}
+            {{ group.name }}
         {% if request.user == group.creator %}
             <strong>(creator)</strong>
         {% endif %}
         </button>
-    </div>
 
     {% endfor %}
+    </div>
 
     <div class="list-group text-center">
     <h2>Received Invites</h2>
