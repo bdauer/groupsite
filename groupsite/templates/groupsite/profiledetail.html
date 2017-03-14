@@ -1,6 +1,10 @@
 {% extends "groupsite/base.html" %}
 
 {% block content %}
-<p>avatar: <img src="{{ object.avatar.url }}" height="100" width="100"</p>
+<p>avatar: {% if object.avatar.url %}
+                <img src="{{ object.avatar.url }}" height="100" width="100"</p>
+            {% else %}
+                none provided.
+            {% endif %}
 <p>bio: {{ object.bio }}</p>
 {% endblock %}
