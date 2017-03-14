@@ -33,7 +33,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', 'group-site-staging.pin92cyv3d.us-east-1.elasticbeanstalk.com',
                  'ip-172-31-19-100.ec2.internal', '34.206.32.33',
-                 'hgroup-site-production.pin92cyv3d.us-east-1.elasticbeanstalk.com/']
+                 'group-site-production.pin92cyv3d.us-east-1.elasticbeanstalk.com/']
 
 
 # Application definition
