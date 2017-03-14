@@ -1,12 +1,12 @@
 {% extends "groupsite/base.html" %}
 
 {% block content %}
-    <div class="list-group text-center">
+    <div class="list-group text-center" id="groups-list">
     <h2>My Groups</h2>
 
     {% for group in groups %}
 
-        <form method="GET"
+        <form method="GET" class="list-group text-center"
             {% if user == group.creator %}
                 name="{{group.id}}"
                 action="{% url 'groupsite:update group' pk=group.id %}">
@@ -14,7 +14,6 @@
                 action="{% url 'groupsite:group details' pk=group.id %}">
             {% endif %}
             {% csrf_token %}
-            {{group.id}}
 
         {% if user == group.creator %}
             <button type="button submit" class="list-group-item" name="update_{{group.id}}">
@@ -35,12 +34,12 @@
     {% for invite in received_invites %}
     <div class="list-group-item">
     <form method="POST" action="{% url 'groupsite:update invite' pk=invite.user_group.id %}" >
-        <p>Group: {{ invite.user_group.name }}</p>
+        <p>Group: <span class="group-name">{{ invite.user_group.name }}</span></p>
         <p>Description: {{ invite.user_group.description }}</p>
         <p>Invited by: {{ invite.invitor.username }}</p>
     <div class="button-group" role="group">
-        <button type="button" class="btn btn-secondary" name="accepted_{{invite.id}}">Accept</button>
-        <button type="button" class="btn btn-secondary" name="declined_{{invite.id}}">Decline</button>
+        <button type="button" class="btn btn-secondary accept-button" name="accepted_{{invite.id}}">Accept</button>
+        <button type="button" class="btn btn-secondary decline-button" name="declined_{{invite.id}}">Decline</button>
     </div>
     </div>
     {% endfor %}
@@ -56,4 +55,8 @@
     {% endfor %}
     </div>
 
+{% endblock %}
+{% block javascript %}
+{% load static %}
+<script type="text/javascript" src="{% static "groupsite/invites.js" %}" ></script>
 {% endblock %}
