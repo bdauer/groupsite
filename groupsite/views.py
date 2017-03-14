@@ -4,9 +4,10 @@ from django.views import generic
 from django.http import (HttpResponse, HttpRequest, HttpResponseRedirect,
                          JsonResponse)
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django import forms
 from .models import UserGroup, Invitation, UserProfile
-from django.contrib.auth.decorators import login_required
+from .forms import CreateInviteForm
 
 # Create your views here.
 def index(request):
@@ -53,8 +54,22 @@ class CreateInviteView(LoginRequiredMixin, generic.CreateView):
     Create a new invite.
     """
     template_name = "groupsite/createinvite.html"
-    model = Invitation
-    fields = ['user_group', 'invitee']
+    form_class = CreateInviteForm
+
+    def get_success_url(self):
+        return reverse_lazy('groupsite:groups')
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateInviteView, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
+    # need to override user_group to only show groups for the current user.
+
+    def form_valid(self, form):
+        form.instance.invitor = self.request.user
+        form.save()
+        return super(CreateInviteView, self).form_valid(form)
 
 class CreateGroupView(LoginRequiredMixin, generic.CreateView):
     """
@@ -62,7 +77,7 @@ class CreateGroupView(LoginRequiredMixin, generic.CreateView):
     """
     template_name = "groupsite/creategroup.html"
     model = UserGroup
-    fields = ['name', 'description', 'members']
+    fields = ['name', 'description']
 
     def get_success_url(self):
         return reverse_lazy('groupsite:groups')
@@ -78,11 +93,9 @@ class ManageGroupView(LoginRequiredMixin, generic.UpdateView):
     """
     Update a group.
     """
-    # def get_object(self):
-    #     object = UserGroup.objects.get(pk=self.kwargs['id'])
     template_name = "groupsite/creategroup.html"
     model = UserGroup
-    fields = ['description', 'members']
+    fields = ['description']
 
     def get_success_url(self):
         return reverse_lazy('groupsite:groups')
@@ -112,10 +125,3 @@ class ProfileDetailView(LoginRequiredMixin, generic.DetailView):
     """
     template_name = "groupsite/profiledetail.html"
     model = UserProfile
-
-
-# Profile
-#   name, avatar, bio.
-#
-# Edit Profile
-#   name, avatar, bio.
