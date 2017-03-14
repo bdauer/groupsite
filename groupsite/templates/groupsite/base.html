@@ -23,6 +23,7 @@
 
             {% if request.get_full_path == '/groups' %}
                 <a href="{% url 'groupsite:create group' %}" type="button" class="btn btn-default">Create Group</a>
+                <a href="{% url 'groupsite:create invite' %}" type="button" class="btn btn-default">Invite to Groups</a>
             {% else %}
                 <a href="{% url 'groupsite:groups' %}" type="button" class="btn btn-default">Groups</a>
             {% endif %}
@@ -34,7 +35,7 @@
             {% endif %}
 
             {% if '/updategroup' in request.get_full_path %}
-                <a href="{% url 'groupsite:create invite' %}" type="button" class="btn btn-default">Invite</a>
+
             {% endif %}
 
             <a href="{% url 'logout' %}" type="button" class="btn btn-default">Sign out</a>
