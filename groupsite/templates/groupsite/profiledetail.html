@@ -1,7 +1,7 @@
 {% extends "groupsite/base.html" %}
 
 {% block content %}
-<p>avatar: {% if object.avatar.url %}
+<p>avatar: {% if object.avatar.url != None %}
                 <img src="{{ object.avatar.url }}" height="100" width="100"</p>
             {% else %}
                 none provided.
