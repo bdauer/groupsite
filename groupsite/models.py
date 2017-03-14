@@ -74,7 +74,7 @@ class Invitation(models.Model):
     Invitations are extended by a group creator to allow membership in their group.
     """
     objects = InvitationManager()
-    user_group = models.OneToOneField(UserGroup)
+    user_group = models.ForeignKey(UserGroup)
     invitor = models.ForeignKey(User, related_name='invitor')
     invitee = models.ForeignKey(User, related_name='invitee')
 

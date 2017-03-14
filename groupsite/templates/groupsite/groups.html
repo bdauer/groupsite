@@ -33,7 +33,7 @@
     <h2>Received Invites</h2>
     {% for invite in received_invites %}
     <div class="list-group-item">
-    <form method="POST" action="{% url 'groupsite:update invite' pk=invite.user_group.id %}" >
+    <form method="POST" action="{% url 'groupsite:update invite" >
         <p>Group: <span class="group-name">{{ invite.user_group.name }}</span></p>
         <p>Description: {{ invite.user_group.description }}</p>
         <p>Invited by: {{ invite.invitor.username }}</p>

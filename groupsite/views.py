@@ -17,20 +17,26 @@ def index(request):
 def login(request):
     return render(request, 'groupsite/login.html')
 
-@login_required
-def update_invite(request, group_id):
+
+def update_invite(request):
     """
     Accept or decline an invite.
     """
     if request.is_ajax():
-        values = Request.POST['name'].split('_')
-        status = values[0]
-        pk = values[1]
-        invite = Invitation.objects.get(pk=pk)
-        invite.status = status
+        invite_id = request.POST['invite_id']
+        status = request.POST['new_status']
+        print(status)
+        invite = Invitation.objects.get(pk=invite_id)
+
+        if status == "accepted":
+            invite.status = "A"
+            group = invite.user_group
+            group.members.add(request.user)
+            group.save()
+        elif status == "declined":
+            invite.status = "D"
         invite.save()
-        content = {"status": status}
-        return JsonResponse(content)
+    return HttpResponse()
 
 class GroupsView(LoginRequiredMixin, generic.ListView):
     """
