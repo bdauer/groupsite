@@ -31,9 +31,8 @@ PRODUCTION = SECURE_SETTINGS.get("PRODUCTION", True)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'group-site-staging.pin92cyv3d.us-east-1.elasticbeanstalk.com',
-                 'ip-172-31-19-100.ec2.internal', '34.206.32.33',
-                 'group-site-production.pin92cyv3d.us-east-1.elasticbeanstalk.com/']
+ALLOWED_HOSTS = ['localhost', 'group-site-production.pin92cyv3d.us-east-1.elasticbeanstalk.com',
+                 'ip-172-31-19-100.ec2.internal', '34.206.32.33']
 
 
 # Application definition
