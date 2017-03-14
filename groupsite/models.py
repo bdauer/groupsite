@@ -59,14 +59,14 @@ class InvitationManager(models.Manager):
         Return all pending sent invites.
         """
         return self.filter(invitor=user,
-                           status='pending')
+                           status='P')
 
     def get_pending_received_invites(self, user):
         """
         Return all pending received invites.
         """
         return self.filter(invitee=user,
-                           status='pending')
+                           status='P')
 
 
 class Invitation(models.Model):
