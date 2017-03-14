@@ -33,7 +33,12 @@
                 <a href="{% url 'groupsite:profile details' pk=user.pk %}" type="button" class="btn btn-default">Profile</a>
             {% endif %}
 
+            {% if '/updategroup' in request.get_full_path %}
+                <a href="{% url 'groupsite:create invite' %}" type="button" class="btn btn-default">Invite</a>
+            {% endif %}
+
             <a href="{% url 'logout' %}" type="button" class="btn btn-default">Sign out</a>
+
 
         {% else %}
             <a href="{% url 'groupsite:login' %}" type="button" class="btn btn-default">Sign in</a>
