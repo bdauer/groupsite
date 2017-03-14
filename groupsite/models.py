@@ -13,6 +13,12 @@ class UserGroupManager(models.Manager):
         """
         return self.filter(members=user)
 
+    def get_created_groups(self, user):
+        """
+        Return all groups created by the user.
+        """
+        return self.filter(creator=user)
+
 class UserGroup(models.Model):
     """
     Group for users. Not to be confused with the auth groups.
